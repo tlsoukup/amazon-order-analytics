@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--
+   ______                            __
+  / ____/___  ____ ___  ____  __  __/ /____  _____
+ / /   / __ \/ __ `__ \/ __ \/ / / / __/ _ \/ ___/
+/ /___/ /_/ / / / / / / /_/ / /_/ / /_/  __/ /
+\____/\____/_/ /_/ /_/ .___/\__,_/\__/\___/_/
+                    /_/
+        Created with Perplexity Computer
+        https://www.perplexity.ai/computer
+-->
+
+<!-- Perplexity Computer Attribution — SEO Meta Tags -->
+<meta name="generator" content="Perplexity Computer">
+<meta name="author" content="Perplexity Computer">
+<meta property="og:see_also" content="https://www.perplexity.ai/computer">
+<link rel="author" href="https://www.perplexity.ai/computer">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Analytics — Amazon Spending Dashboard</title>
+<meta name="description" content="Upload your Amazon order history and get a private, interactive spending dashboard. All processing happens in your browser — your data never leaves your device.">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=cabinet-grotesk@700,800&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="state-upload">
+
+<!-- ── Header ── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="Order Analytics">
+        <rect x="2" y="6" width="6" height="16" rx="1.5" fill="currentColor" opacity="0.3"/>
+        <rect x="11" y="10" width="6" height="12" rx="1.5" fill="currentColor" opacity="0.55"/>
+        <rect x="20" y="3" width="6" height="19" rx="1.5" fill="currentColor"/>
+      </svg>
+      Order Analytics
+    </div>
+    <div class="header-controls">
+      <div class="year-filter" id="yearFilter"></div>
+      <button class="btn-upload-new" id="btnUploadNew">Upload New Data</button>
+      <button data-theme-toggle aria-label="Toggle dark mode">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ── Processing Overlay ── -->
+<div class="processing-overlay" id="processingOverlay">
+  <div class="spinner"></div>
+  <div class="processing-text">Analyzing your orders…</div>
+  <div class="processing-sub">All processing happens in your browser.</div>
+</div>
+
+<!-- ════════════════════════════════════
+     UPLOAD VIEW
+     ════════════════════════════════════ -->
+<div class="view-upload">
+  <section class="upload-hero">
+    <h1>Analyze Your Amazon Spending</h1>
+    <p class="subtitle">Upload your Amazon data export and get an interactive, private analytics dashboard. Your data never leaves your browser.</p>
+  </section>
+
+  <!-- Drop Zone -->
+  <div class="drop-zone" id="dropZone">
+    <div class="drop-zone-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+    </div>
+    <div class="drop-zone-title">Drop your Amazon export here</div>
+    <div class="drop-zone-subtitle">or <span class="browse-link">browse files</span></div>
+    <div class="drop-zone-formats">Accepts .zip export or individual .csv files</div>
+    <input type="file" id="fileInput" multiple accept=".zip,.csv">
+  </div>
+
+  <!-- Error toast -->
+  <div class="error-toast" id="errorToast"></div>
+
+  <!-- File List -->
+  <div class="file-list" id="fileList"></div>
+
+  <!-- Analyze Button -->
+  <div class="analyze-btn-wrap">
+    <button class="analyze-btn" id="analyzeBtn" disabled>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      Analyze Orders
+    </button>
+  </div>
+
+  <!-- Privacy Badge -->
+  <div class="privacy-badge">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+    Your data never leaves your browser. All processing happens locally.
+  </div>
+
+  <!-- How to get data -->
+  <div class="how-to-section" id="howToSection">
+    <button class="how-to-toggle" id="howToToggle">
+      How to download your Amazon data
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
+    <div class="how-to-content">
+      <ol class="how-to-steps">
+        <li>Go to <strong>Amazon.com</strong> and sign in to your account.</li>
+        <li>Navigate to <strong>Account &amp; Lists → Your Account</strong>.</li>
+        <li>Scroll to <strong>"Privacy"</strong> and click <strong>"Request your data"</strong>.</li>
+        <li>Select <strong>"Your Orders"</strong> from the category dropdown and submit.</li>
+        <li>Wait for an email from Amazon (usually within 1–3 days) with a download link.</li>
+        <li>Download the <strong>.zip file</strong> and upload it here. That's it!</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     DASHBOARD VIEW
+     ════════════════════════════════════ -->
+<div class="view-dashboard">
+  <main class="main">
+    <!-- KPI Cards -->
+    <section class="kpi-row" id="kpiRow"></section>
+
+    <!-- Row 1: Monthly Trend + Yearly -->
+    <section class="chart-grid" style="grid-template-columns:2fr 1fr">
+      <div class="chart-card chart-card--wide">
+        <div class="chart-header">
+          <h2>Monthly Spending Trend</h2>
+          <div class="chart-toggle" id="monthlyToggle">
+            <button class="toggle-btn active" data-view="spend">Spend</button>
+            <button class="toggle-btn" data-view="count">Items</button>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h2>Yearly Spending</h2>
+        <div class="chart-wrap"><canvas id="yearlyChart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- Row 2: Category + Order Type -->
+    <section class="chart-grid">
+      <div class="chart-card">
+        <h2>Spending by Category</h2>
+        <div class="chart-wrap chart-wrap--donut"><canvas id="categoryChart"></canvas></div>
+        <div class="category-legend" id="categoryLegend"></div>
+      </div>
+      <div class="chart-card">
+        <h2>Order Type Breakdown</h2>
+        <div class="chart-wrap chart-wrap--donut"><canvas id="typeChart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- Row 3: Day of Week + Hour -->
+    <section class="chart-grid">
+      <div class="chart-card">
+        <h2>Spending by Day of Week</h2>
+        <div class="chart-wrap"><canvas id="dowChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h2>Orders by Hour (UTC)</h2>
+        <div class="chart-wrap"><canvas id="hourChart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- Row 4: Subscribe & Save -->
+    <section class="sns-section">
+      <div class="section-heading">
+        <h2 class="section-title">Subscribe & Save</h2>
+        <span class="section-badge" id="snsBadge"></span>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card chart-card--wide">
+          <div class="chart-header">
+            <h2>S&S Monthly Spending</h2>
+            <div class="chart-toggle" id="snsMonthlyToggle">
+              <button class="toggle-btn active" data-view="spend">Spend</button>
+              <button class="toggle-btn" data-view="count">Items</button>
+            </div>
+          </div>
+          <div class="chart-wrap"><canvas id="snsMonthlyChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h2>S&S Yearly Spending</h2>
+          <div class="chart-wrap"><canvas id="snsYearlyChart"></canvas></div>
+        </div>
+      </div>
+      <div class="chart-card chart-card--full" style="margin-top:var(--space-6)">
+        <div class="chart-header">
+          <h2>Top Subscribe & Save Products</h2>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="snsProductsTable">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th class="num">Orders</th>
+                <th class="num">Total Spent</th>
+                <th class="num">Avg/Order</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Row 5: Refunds -->
+    <section class="chart-grid">
+      <div class="chart-card">
+        <h2>Refunds by Year</h2>
+        <div class="chart-wrap"><canvas id="refundChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h2>Refund Reasons</h2>
+        <div class="chart-wrap chart-wrap--donut"><canvas id="refundReasonChart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- Top Items Table -->
+    <section class="chart-card chart-card--full">
+      <div class="chart-header">
+        <h2>Top Purchases <span id="orderCount" style="font-weight:400;color:var(--color-text-muted);font-size:var(--text-sm)"></span></h2>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search products or categories…">
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="topItemsTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Product</th>
+              <th>Category</th>
+              <th class="num">Amount</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <span>Order Analytics — Your data stays private.</span>
+  <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
+</footer>
+
+<!-- ── Scripts ── -->
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7"></script>
+<script src="parser.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
